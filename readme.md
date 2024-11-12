@@ -26,7 +26,7 @@ Este projeto visa o desenvolvimento de um aplicativo para dispositivos móveis f
 - **Frontend**: React Native
 - **Backend**: Spring Boot com microserviços (API para armazenar e distribuir os exercícios e dados de usuários)
 - **Banco de Dados**: Firebase ou MongoDB para armazenar informações sobre usuários, progresso e exercícios.
-- **Armazenamento na Nuvem**: Google Cloud ou AWS para hospedar o backend e os dados do usuário.
+- **Armazenamento na Nuvem**: Google Cloud/Heroku para hospedar o backend e os dados do usuário.
 - **Armazenamento de Vídeos**: YouTube (utilização da API para listar e reproduzir vídeos no app)
 
 ### Arquitetura do Sistema
@@ -37,8 +37,33 @@ Este projeto visa o desenvolvimento de um aplicativo para dispositivos móveis f
 
 ### Estrutura de Dados
 
-- Exercícios estão representados em formato JSON, como exemplificado anteriormente. Isso facilita a manipulação dos dados tanto no backend quanto no frontend.
+- Exercícios estão representados em formato JSON. Isso facilita a manipulação dos dados tanto no backend quanto no frontend.
+
+```
+{
+    "id": 1,
+    "pergunta": "Calcule a velocidade média de um carro que percorreu 100 km em 2 horas.",
+    "imagem":"src/imagens/questao_137.png",
+    "tipo": "múltipla escolha",
+    "nivel_dificuldade": "intermediario",
+    "respostas": [
+        { "id": "a", "texto": "50 km/h", "correta": true },
+        { "id": "b", "texto": "100 km/h", "correta": false },
+        { "id": "c", "texto": "25 km/h", "correta": false }
+    ],
+    "explicacao": "Para calcular a velocidade média, divida a distância pelo tempo (100 km / 2 h = 50 km/h)."
+    "feedback": {
+      "mensagens": {
+        "acerto": "Parabéns, você acertou!",
+        "erro": "Não foi dessa vez. Revise o conceito de velocidade média."
+      }
+    }
+}
+```
+
 - Cada usuário tem um perfil com progresso de atividades armazenado em uma coleção do banco de dados.
+
+
 
 ## Estrutura do Projeto 🏗️
 
@@ -101,6 +126,14 @@ Este projeto visa o desenvolvimento de um aplicativo para dispositivos móveis f
 - **Tabs Menu**: O Tabs Menu está disponível para fácil acesso entre **Home** e **Estatísticas**.
 - **Login Necessário**: Para acessar as **Estatísticas**, o usuário é redirecionado para a tela de login (se não estiver autenticado).
 - **Interação com Conteúdo**: Nas telas de **Vídeo-Aulas**, **Exercícios** e **Jogos**, o usuário pode explorar o conteúdo, consumir e realizar atividades, recebendo feedback imediato e registrando progresso.
+
+- **Fluxos**
+
+  - Tela Home → Vídeo-Aulas, Exercícios, Jogos, Estatísticas.
+  - Vídeo-Aulas → Assistir Vídeo → Voltar.
+  - Exercícios → Selecionar Exercício → Resolver → Ver Feedback → Avançar.
+  - Jogos → Selecionar Jogo → Jogar → Salvar Progresso.
+  - Estatísticas → Visualizar Gráficos e Relatórios.
 
 ## Etapas do Desenvolvimento 🛠️
 
@@ -198,7 +231,7 @@ Precisamos considerar a segurança dos dados dos usuários, garantindo que infor
    npm install @react-native-masked-view/masked-view
    ```
 
-**Estrutura de pastas sugerida para o projeto**
+**Estrutura de pastas sugerida para o projeto** <small>[Sugestão de leitura](https://www.waldo.com/blog/react-native-project-structure)</small>
 
 ```
 
@@ -222,4 +255,3 @@ src/  # Pasta raiz
 
 ```
 
-<small>[Sugestão de leutura](https://www.waldo.com/blog/react-native-project-structure)</small>
