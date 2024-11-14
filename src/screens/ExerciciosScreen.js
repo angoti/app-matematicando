@@ -40,7 +40,18 @@ export default function ExerciciosScreen() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Lista de Exercícios</Text>
-			<FlatList data={exercicios} renderItem={({ item }) => <CardQuestion handlePress={handlePress} item={item} />} keyExtractor={item => item.id.toString()} pagingEnabled horizontal />
+			<FlatList
+				data={exercicios}
+				renderItem={({ item }) => <CardQuestion handlePress={handlePress} item={item} />}
+				keyExtractor={item => item.id.toString()}
+				pagingEnabled
+				horizontal
+				snapToAlignment="center" // Alinha o centro do item com o centro da tela
+				contentContainerStyle={{ alignItems: "center" }} // Centraliza os itens dentro do FlatList
+				decelerationRate="fast"
+				showsHorizontalScrollIndicator={false}
+				ItemSeparatorComponent={() => <View style={{ width: 20 }} />} // Adiciona um separador entre os itens
+			/>
 		</View>
 	);
 }

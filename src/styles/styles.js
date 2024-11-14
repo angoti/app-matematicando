@@ -42,8 +42,8 @@ export default StyleSheet.create({
 		fontSize: 16,
 	},
 	fullScreenItemContainer: {
-		width: Dimensions.get("window").width - 60, // Ajuste para evitar extrapolação
-		height: Dimensions.get("window").height - 30, // Ajuste para evitar extrapolação
+		width: Dimensions.get("window").width - 40, // Ajuste para evitar extrapolação
+		height: Dimensions.get("window").height - 200, // Ajuste para evitar extrapolação
 		backgroundColor: "#fff",
 		padding: 15,
 		justifyContent: "center",
@@ -56,7 +56,6 @@ export default StyleSheet.create({
 		shadowOpacity: 0.2,
 		shadowRadius: 5,
 		elevation: 5,
-		margin: 15, // Adicionado para centralizar o cartão
 	},
 	highlightedQuestion: {
 		fontSize: 22,
