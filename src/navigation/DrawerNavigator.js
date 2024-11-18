@@ -5,7 +5,7 @@ import * as Font from "expo-font";
 import TabNavigator from "./TabNavigator";
 import ExerciciosScreen from "../screens/ExerciciosScreen";
 import JogosScreen from "../screens/JogosScreen";
-import EstatisticasScreen from "../screens/EstatisticasScreen";
+import VideoScreen from "../screens/VideoScreen";
 import LogoTitle from "../components/LogoTitle";
 import { Text, ActivityIndicator } from "react-native";
 
@@ -48,9 +48,8 @@ export default function DrawerNavigator() {
 				headerRight: () => <LogoTitle />,
 			}}>
 			<Drawer.Screen name="Inicio" component={TabNavigator} />
-			<Drawer.Screen name="Exercícios" component={ExerciciosScreen} />
 			<Drawer.Screen name="Jogos" component={JogosScreen} />
-			<Drawer.Screen name="Estatísticas" component={EstatisticasScreen} />
+			<Drawer.Screen name="Video aulas" component={VideoScreen} />
 		</Drawer.Navigator>
 	);
 }

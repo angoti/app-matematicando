@@ -43,7 +43,7 @@ export default StyleSheet.create({
 	},
 	fullScreenItemContainer: {
 		width: Dimensions.get("window").width - 40, // Ajuste para evitar extrapolação
-		height: Dimensions.get("window").height - 200, // Ajuste para evitar extrapolação
+		height: Dimensions.get("window").height - 240, // Ajuste para evitar extrapolação
 		backgroundColor: "#fff",
 		padding: 15,
 		justifyContent: "center",
