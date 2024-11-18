@@ -17,7 +17,6 @@
     "expo": "~52.0.3",
     "expo-font": "~13.0.1",
     "expo-status-bar": "~2.0.0",
-    "matematicando": "file:",
     "react": "18.3.1",
     "react-native": "0.76.1",
     "react-native-gesture-handler": "^2.20.2",
