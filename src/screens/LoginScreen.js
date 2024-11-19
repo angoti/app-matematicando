@@ -6,11 +6,12 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { useAuth } from '../api/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 const LoginScreen = () => {
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
-  const { login } = useAuth();
+  const { login } = useContext(AuthContext);
 
   return (
     <View style={styles.layout}>

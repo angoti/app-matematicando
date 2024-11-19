@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 // Configuração do Google Signin
@@ -18,11 +18,13 @@ const onLogout = async () => {
 };
 
 // Contexto de autenticação
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [contadorAcertos, setContadorAcertos] = useState(0);
+  const [contadorFeitos, setContadorFeitos] = useState(0);
 
   const login = async () => {
     const user = await onLogin();
@@ -37,10 +39,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        logout,
+        contadorAcertos,
+        setContadorAcertos,
+        contadorFeitos,
+        setContadorFeitos,
+      }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

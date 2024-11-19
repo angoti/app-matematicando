@@ -1,10 +1,10 @@
 import { Button, Text, View, Image } from 'react-native';
 import styles from '../styles/styles';
-import { useAuth } from '../api/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+import { useContext } from 'react';
 
 export default function HomeScreen({ navigation }) {
-  const { user, logout } = useAuth();
-  console.log(user);
+  const { user, logout } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
