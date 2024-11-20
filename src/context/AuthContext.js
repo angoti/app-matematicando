@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async () => {
     const user = await onLogin();
+    console.log(user);
     setUser(user);
     setIsAuthenticated(true);
   };
