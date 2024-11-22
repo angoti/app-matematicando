@@ -25,10 +25,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [contadorAcertos, setContadorAcertos] = useState(0);
   const [contadorFeitos, setContadorFeitos] = useState(0);
+  const [qtdeExercicios, setQtdeExercicios] = useState(0);
 
   const login = async () => {
     const user = await onLogin();
-    console.log(user);
     setUser(user);
     setIsAuthenticated(true);
   };
@@ -50,6 +50,8 @@ export const AuthProvider = ({ children }) => {
         setContadorAcertos,
         contadorFeitos,
         setContadorFeitos,
+        qtdeExercicios,
+        setQtdeExercicios,
       }}>
       {children}
     </AuthContext.Provider>

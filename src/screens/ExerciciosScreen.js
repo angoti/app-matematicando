@@ -6,7 +6,7 @@ import { CardQuestion } from '../components/CardQuestion';
 import { AuthContext } from '../context/AuthContext';
 
 export default function ExerciciosScreen() {
-  const { setContadorAcertos, setContadorFeitos } = useContext(AuthContext);
+  const { setContadorAcertos, setContadorFeitos, setQtdeExercicios } = useContext(AuthContext);
   const [exercicios, setExercicios] = useState([]);
 
   useEffect(() => {
@@ -17,28 +17,44 @@ export default function ExerciciosScreen() {
       acertou: null,
     }));
     setExercicios(fetchedExercicios);
+    setQtdeExercicios(fetchedExercicios.length);
   }, []);
 
+  const contaExerciciosFeitos = (updatedExercicios) => {
+    const contadorFeitos = updatedExercicios.filter(
+      exercicio => exercicio.feito,
+    ).length;
+    setContadorFeitos(contadorFeitos);
+  };
+
+  const contaExerciciosAcertados = (updatedExercicios) => {
+    const contadorAcertos = updatedExercicios.filter(
+      exercicio => exercicio.acertou,
+    ).length;
+    setContadorAcertos(contadorAcertos);
+  };
+
   const handlePress = (resposta, item) => {
-    console.log('Resposta:', resposta);
-    console.log('Item:', item);
-    setContadorFeitos(prev => prev + 1);
     if (resposta.correta === true) {
-      setContadorAcertos(prev => prev + 1);
-      setExercicios(prevExercicios =>
-        prevExercicios.map(exercicio =>
+      setExercicios(prevExercicios => {
+        const updatedExercicios = prevExercicios.map(exercicio =>
           exercicio.id === item.id
             ? { ...exercicio, acertou: true, feito: true }
             : exercicio,
-        ),
-      );
+        );
+        contaExerciciosAcertados(updatedExercicios);
+        contaExerciciosFeitos(updatedExercicios);
+        return updatedExercicios;
+      });
       return item.feedback.mensagens.acerto;
     } else {
-      setExercicios(prevExercicios =>
-        prevExercicios.map(exercicio =>
+      setExercicios(prevExercicios => {
+        const updatedExercicios = prevExercicios.map(exercicio =>
           exercicio.id === item.id ? { ...exercicio, feito: true } : exercicio,
-        ),
-      );
+        );
+        contaExerciciosFeitos(updatedExercicios);
+        return updatedExercicios;
+      });
       return item.feedback.mensagens.erro;
     }
   };

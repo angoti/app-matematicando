@@ -26,11 +26,6 @@
     "plugins": [
       "expo-font",
       "@react-native-google-signin/google-signin"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "7267d139-f17f-47f4-8884-b61774293ac5"
-      }
-    }
+    ]
   }
 }

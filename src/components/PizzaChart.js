@@ -1,14 +1,11 @@
-import { Pie, PolarChart } from 'victory-native';
+import { View } from 'react-native';
+import { PieChart } from 'react-native-gifted-charts';
 
 export function PizzaChart({ data }) {
-  console.log('data', data);
+
   return (
-    <PolarChart
-      data={data}
-      labelKey={'label'}
-      valueKey={'value'}
-      colorKey={'color'}>
-      <Pie.Chart />
-    </PolarChart>
+    <View style={{ height: 250, marginVertical: 20 }}>
+      <PieChart data={data} />
+    </View>
   );
 }
