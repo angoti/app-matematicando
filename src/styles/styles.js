@@ -101,4 +101,37 @@ export default StyleSheet.create({
     marginBottom: 8,
     marginRight: 8,
   },
+  progressIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressText: {
+    marginLeft: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#4b0082',
+  },
+  difficultyCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  difficultyText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  progressBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  progressBar: {
+    width: 100,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#ddd',
+  },
 });
