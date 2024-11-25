@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
-import { View, Text, FlatList, Pressable } from 'react-native';
+import { View, Text, FlatList, Pressable, Alert } from 'react-native';
 import styles from '../styles/styles';
-import { getExercicios } from '../api/exerciciosApi';
+import { getExercicios } from '../api/dados';
 import { CardQuestion } from '../components/CardQuestion';
 import { AuthContext } from '../context/AuthContext';
 
@@ -70,19 +70,34 @@ export default function ExerciciosScreen() {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Pressable style={styles.statButton}>
+      <View style={{ flexDirection: 'row' }}>
+        <Pressable
+          style={styles.statButton}
+          onPress={() =>
+            Alert.alert(
+              'Exercícios Feitos com Sucesso',
+              exercicios
+                .filter(ex => ex.acertou == true)
+                .map(ex => ex.id)
+                .join(', '),
+            )
+          }>
           <Text style={styles.statText}>Acertos</Text>
           <Text style={[styles.statNumber, { backgroundColor: '#32cd32' }]}>
             {contadorAcertos}
           </Text>
         </Pressable>
-        <Pressable style={styles.statButton} onPress={() => Alert.alert('ops')}>
+        <Pressable
+          style={styles.statButton}
+          onPress={() =>
+            Alert.alert(
+              'Exercícios Feitos',
+              exercicios
+                .filter(ex => ex.feito == true)
+                .map(ex => ex.id)
+                .join(', '),
+            )
+          }>
           <Text style={styles.statText}>Feitos</Text>
           <Text style={[styles.statNumber, { backgroundColor: '#a0522d' }]}>
             {contadorFeitos}

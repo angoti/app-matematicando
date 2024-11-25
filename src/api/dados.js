@@ -666,3 +666,80 @@ export function getExercicios() {
     },
   ];
 }
+
+export function getVideoAulas() {
+  return [
+    {
+      id: 1,
+      titulo: 'sen30°=1/2 ✅ Tá! Mas por quê?😎 #1',
+      videoId: 'wXW-6qZtYQY',
+    },
+    {
+      id: 2,
+      titulo:
+        'Cosseno de 60 graus é igual a 0,5 ? De onde retiraram esse valor ?',
+      videoId: 'kUpxzYf-Iz4',
+    },
+    {
+      id: 3,
+      titulo: 'Você sabe por que tangente de 45 graus é igual a 1 ?',
+      videoId: '70SIKC2pDcc',
+    },
+    {
+      id: 4,
+      titulo: 'APRENDA AGORA como calcular SENO , COSSENO E TANGENTE !',
+      videoId: 'R2mYeSBiwW8',
+    },
+    {
+      id: 5,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+    {
+      id: 6,
+      titulo: 'sen30°=1/2 ✅ Tá! Mas por quê?😎 #1',
+      videoId: 'wXW-6qZtYQY',
+    },
+    {
+      id: 7,
+      titulo:
+        'Cosseno de 60 graus é igual a 0,5 ? De onde retiraram esse valor ?',
+      videoId: 'kUpxzYf-Iz4',
+    },
+    {
+      id: 8,
+      titulo: 'Você sabe por que tangente de 45 graus é igual a 1 ?',
+      videoId: '70SIKC2pDcc',
+    },
+    {
+      id: 9,
+      titulo: 'APRENDA AGORA como calcular SENO , COSSENO E TANGENTE !',
+      videoId: 'R2mYeSBiwW8',
+    },
+    {
+      id: 10,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+    {
+      id: 11,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+    {
+      id: 12,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+    {
+      id: 13,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+    {
+      id: 14,
+      titulo: 'FÁCIL e RÁPIDO | ÂNGULOS COMPLEMENTARES e SUPLEMENTARES',
+      videoId: 'U_735SRkPvA',
+    },
+  ];
+}
