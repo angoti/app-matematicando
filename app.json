@@ -25,7 +25,31 @@
     },
     "plugins": [
       "expo-font",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true
+        }
+      ],
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            // Override the shared configuration for Android
+            "enableFTS": false,
+            "useSQLCipher": false
+          }
+        }
+      ],
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ]
     ],
     "extra": {
       "eas": {

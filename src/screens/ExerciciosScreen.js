@@ -1,69 +1,43 @@
-import { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Pressable, Alert } from 'react-native';
 import styles from '../styles/styles';
-import { getExercicios } from '../api/dados';
 import { CardQuestion } from '../components/CardQuestion';
-import { AuthContext } from '../context/AuthContext';
+import {
+  countExerciciosCertos,
+  countExerciciosFeitos,
+  getExercicios,
+  updateAcertouStatus,
+  updateFeitoStatus,
+} from '../api/bancoDeDados';
+import { useState, useEffect } from 'react';
 
 export default function ExerciciosScreen() {
-  const {
-    setContadorAcertos,
-    setContadorFeitos,
-    setQtdeExercicios,
-    qtdeExercicios,
-    contadorAcertos,
-    contadorFeitos,
-  } = useContext(AuthContext);
   const [exercicios, setExercicios] = useState([]);
+  const [exerciciosCertos, setExerciciosCertos] = useState(0);
+  const [exerciciosFeitos, setExerciciosFeitos] = useState(0);
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
-    // Simulando consulta ao servidor para obter os exercícios
-    const fetchedExercicios = getExercicios().map(exercicio => ({
-      ...exercicio,
-      feito: false,
-      acertou: null,
-    }));
-    setExercicios(fetchedExercicios);
-    setQtdeExercicios(fetchedExercicios.length);
-  }, []);
+    console.log('ExerciciosScreen useEffect');
+    getExercicios().then(exercicios => {
+      console.log('useEffect getExercicios:', exercicios);
+      setExercicios(exercicios);
+    });
+    countExerciciosCertos().then(count => {
+      console.log('useEffect countExerciciosCertos:', count);
+      setExerciciosCertos(count);
+    });
+    countExerciciosFeitos().then(count => setExerciciosFeitos(count));
+  }, [flag]);
 
-  const contaExerciciosFeitos = updatedExercicios => {
-    const contadorFeitos = updatedExercicios.filter(
-      exercicio => exercicio.feito,
-    ).length;
-    setContadorFeitos(contadorFeitos);
-  };
-
-  const contaExerciciosAcertados = updatedExercicios => {
-    const contadorAcertos = updatedExercicios.filter(
-      exercicio => exercicio.acertou,
-    ).length;
-    setContadorAcertos(contadorAcertos);
-  };
-
-  const handlePress = (resposta, item) => {
+  const corrigeExercicio = (resposta, item) => {
     if (resposta.correta === true) {
-      setExercicios(prevExercicios => {
-        const updatedExercicios = prevExercicios.map(exercicio =>
-          exercicio.id === item.id
-            ? { ...exercicio, acertou: true, feito: true }
-            : exercicio,
-        );
-        contaExerciciosAcertados(updatedExercicios);
-        contaExerciciosFeitos(updatedExercicios);
-        return updatedExercicios;
-      });
+      updateAcertouStatus(item.id, true);
+      updateFeitoStatus(item.id, true);
+      setFlag(!flag);
       return item.feedback.mensagens.acerto;
     } else {
-      setExercicios(prevExercicios => {
-        const updatedExercicios = prevExercicios.map(exercicio =>
-          exercicio.id === item.id
-            ? { ...exercicio, acertou: false, feito: true }
-            : exercicio,
-        );
-        contaExerciciosFeitos(updatedExercicios);
-        return updatedExercicios;
-      });
+      updateFeitoStatus(item.id, true);
+      setFlag(!flag);
       return item.feedback.mensagens.erro;
     }
   };
@@ -84,7 +58,7 @@ export default function ExerciciosScreen() {
           }>
           <Text style={styles.statText}>Acertos</Text>
           <Text style={[styles.statNumber, { backgroundColor: '#32cd32' }]}>
-            {contadorAcertos}
+            {exerciciosCertos}
           </Text>
         </Pressable>
         <Pressable
@@ -100,7 +74,7 @@ export default function ExerciciosScreen() {
           }>
           <Text style={styles.statText}>Feitos</Text>
           <Text style={[styles.statNumber, { backgroundColor: '#a0522d' }]}>
-            {contadorFeitos}
+            {exerciciosFeitos}
           </Text>
         </Pressable>
       </View>
@@ -108,10 +82,10 @@ export default function ExerciciosScreen() {
         data={exercicios}
         renderItem={({ item, index }) => (
           <CardQuestion
-            handlePress={handlePress}
+            handlePress={corrigeExercicio}
             item={item}
             index={index}
-            total={qtdeExercicios}
+            total={exercicios.length}
           />
         )}
         keyExtractor={item => item.id.toString()}

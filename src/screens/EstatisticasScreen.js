@@ -1,15 +1,45 @@
-import { Text, View, Alert, Pressable } from 'react-native';
+import { Text, View, Alert, Pressable, ScrollView } from 'react-native';
+import { useState, useEffect } from 'react';
 import styles from '../styles/styles';
-import { useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
 import { PizzaChart } from '../components/PizzaChart';
 import { PieChart } from 'react-native-gifted-charts';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  countExerciciosCertos,
+  countExerciciosFeitos,
+  getExercicios,
+} from '../api/bancoDeDados';
 
 function EstatisticasScreen() {
-  const { contadorAcertos, contadorFeitos, qtdeExercicios } =
-    useContext(AuthContext);
-  
+  const [contadorAcertos, setContadorAcertos] = useState(0);
+  const [contadorFeitos, setContadorFeitos] = useState(0);
+  const [qtdeExercicios, setQtdeExercicios] = useState(0);
+
+  useEffect(() => {
+    countExerciciosCertos()
+      .then(res => {
+        setContadorAcertos(res);
+      })
+      .catch(err => {
+        console.error('Error fetching countExerciciosCertos:', err);
+      });
+
+    countExerciciosFeitos()
+      .then(res => {
+        setContadorFeitos(res);
+      })
+      .catch(err => {
+        console.error('Error fetching countExerciciosFeitos:', err);
+      });
+
+    getExercicios()
+      .then(res => {
+        setQtdeExercicios(res.length);
+      })
+      .catch(err => {
+        console.error('Error fetching getExercicios:', err);
+      });
+  }, []);
+
   const data = [
     {
       text: `Acertos`,

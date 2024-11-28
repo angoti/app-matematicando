@@ -5,13 +5,15 @@ import {
   Button,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
 
 const LoginScreen = () => {
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
-  const { login } = useContext(AuthContext);
+  const { authContext } = useContext(AuthContext);
+  const { signIn } = authContext;
 
   return (
     <View style={styles.layout}>
@@ -22,9 +24,9 @@ const LoginScreen = () => {
         onPress={async () => {
           setIsSigninInProgress(true);
           try {
-            await login();
+            await signIn();
           } catch (e) {
-            // Handle error
+            Alert.alert('Erro', e.message);
           } finally {
             setIsSigninInProgress(false);
           }

@@ -1,5 +1,7 @@
-import { createContext, useState } from 'react';
+import { createContext, useReducer, useEffect, useMemo } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import * as SecureStore from 'expo-secure-store';
+import { Alert } from 'react-native';
 
 // Configuração do Google Signin
 GoogleSignin.configure({
@@ -7,51 +9,76 @@ GoogleSignin.configure({
     '438872457138-miq1lm1c3cue420bg81k8erkqd9o3cij.apps.googleusercontent.com',
 });
 
-// Funções de autenticação
-const onLogin = async () => {
-  const user = await GoogleSignin.signIn();
-  return user;
-};
-
-const onLogout = async () => {
-  await GoogleSignin.signOut();
-};
-
 // Contexto de autenticação
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [contadorAcertos, setContadorAcertos] = useState(0);
-  const [contadorFeitos, setContadorFeitos] = useState(0);
-  const [qtdeExercicios, setQtdeExercicios] = useState(0);
+  const [state, dispatch] = useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            user: action.token,
+            isLoading: false,
+          };
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignout: false,
+            user: action.token,
+          };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignout: true,
+            user: null,
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: false,
+      user: null,
+    },
+  );
 
-  const login = async () => {
-    const user = await onLogin();
-    setUser(user);
-    setIsAuthenticated(true);
-  };
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      let user;
+      try {
+        const userString = await SecureStore.getItemAsync('user');
+        user = userString ? JSON.parse(userString) : null;
+      } catch (e) {
+        Alert.alert(e);
+      }
+      dispatch({ type: 'RESTORE_TOKEN', token: user });
+    };
+    bootstrapAsync();
+  }, []);
 
-  const logout = async () => {
-    await onLogout();
-    setUser(null);
-    setIsAuthenticated(false);
-  };
+  const authContext = useMemo(
+    () => ({
+      signIn: async () => {
+        const returnedObject = await GoogleSignin.signIn();
+        const user = returnedObject.data.user;
+        await SecureStore.setItemAsync('user', JSON.stringify(user));
+        dispatch({ type: 'SIGN_IN', token: user });
+      },
+      signOut: async () => {
+        await GoogleSignin.signOut();
+        await SecureStore.deleteItemAsync('user');
+        dispatch({ type: 'SIGN_OUT' });
+      },
+    }),
+    [],
+  );
 
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated,
-        user,
-        login,
-        logout,
-        contadorAcertos,
-        setContadorAcertos,
-        contadorFeitos,
-        setContadorFeitos,
-        qtdeExercicios,
-        setQtdeExercicios,
+        authContext,
+        state,
       }}>
       {children}
     </AuthContext.Provider>

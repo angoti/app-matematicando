@@ -44,6 +44,7 @@ function VideosScreen() {
         }}>
         {selectedVideoId && (
           <YoutubeIframe
+            key={selectedVideoId} // Add this line
             width={width}
             height="100%"
             videoId={selectedVideoId}
