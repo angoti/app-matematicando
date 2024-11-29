@@ -19,7 +19,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { AuthContext } from '../context/AuthContext';
+import { MainContext } from '../context/MainContext';
 import { useContext } from 'react';
 import TermsScreen from '../screens/TermsScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
@@ -33,8 +33,7 @@ const iconSize = 24;
 
 export default function DrawerNavigator() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const { state, authContext } = useContext(AuthContext);
-
+  const { state, authContext } = useContext(MainContext);
   const { signOut } = authContext;
 
   useEffect(() => {
@@ -122,7 +121,7 @@ export default function DrawerNavigator() {
             }
           }}
         />
-        <Button
+        {/* <Button
           title="Apagar BD"
           onPress={async () => {
             try {
@@ -131,7 +130,7 @@ export default function DrawerNavigator() {
               Alert.alert('Erro', e.message);
             }
           }}
-        />
+        /> */}
       </DrawerContentScrollView>
     );
   }

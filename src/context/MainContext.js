@@ -10,11 +10,13 @@ GoogleSignin.configure({
 });
 
 // Contexto de autenticação
-export const AuthContext = createContext();
+export const MainContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const MainProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
+      console.log('MainProvider:useReducer:prevState:', prevState);
+      console.log('MainProvider:useReducer:action:', action);
       switch (action.type) {
         case 'RESTORE_TOKEN':
           return {
@@ -34,12 +36,18 @@ export const AuthProvider = ({ children }) => {
             isSignout: true,
             user: null,
           };
+        case 'FLAG':
+          return {
+            ...prevState,
+            flag: !prevState.flag,
+          };
       }
     },
     {
       isLoading: true,
       isSignout: false,
       user: null,
+      flag: false,
     },
   );
 
@@ -49,6 +57,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const userString = await SecureStore.getItemAsync('user');
         user = userString ? JSON.parse(userString) : null;
+        console.log('MainProvider:useEffect:user:', user);
       } catch (e) {
         Alert.alert(e);
       }
@@ -70,17 +79,14 @@ export const AuthProvider = ({ children }) => {
         await SecureStore.deleteItemAsync('user');
         dispatch({ type: 'SIGN_OUT' });
       },
+      flag: () => dispatch({ type: 'FLAG' }),
     }),
     [],
   );
 
   return (
-    <AuthContext.Provider
-      value={{
-        authContext,
-        state,
-      }}>
+    <MainContext.Provider value={{ state, authContext }}>
       {children}
-    </AuthContext.Provider>
+    </MainContext.Provider>
   );
 };

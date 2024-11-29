@@ -25,26 +25,28 @@ export const initializeDatabase = async () => {
   console.log('Banco de dados inicializado');
 };
 
-export const checkListaExercicios = async () => {
+export const checkListaExercicios = async id => {
   const firstRow = await db.getFirstAsync(
-    `SELECT COUNT(*) as count FROM exercicios;`,
+    `SELECT COUNT(*) as count FROM exercicios where userID=?;`,
+    id,
   );
   if (firstRow.count > 0) {
     console.log('Registros da tabela exercicios: ', firstRow.count);
   } else {
     console.log('Tabela vazia, inserindo dados iniciais...');
-    insertInitialData();
+    insertInitialData(id);
   }
 };
 
-export const insertInitialData = () => {
+export const insertInitialData = id => {
   console.log('Exercícios iniciais: ', exerciciosInicial);
   exerciciosInicial.forEach(async exercicio => {
     try {
       const result = await db.runAsync(
-        `INSERT INTO exercicios (videoAulaID, trancado, feito, acertou, pergunta, imagem, tipo, nivel_dificuldade, respostas, explicacao, feedback) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        `INSERT INTO exercicios (userID, videoAulaID, trancado, feito, acertou, pergunta, imagem, tipo, nivel_dificuldade, respostas, explicacao, feedback) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
         [
+          id,
           JSON.stringify(exercicio.videoAulaID),
           exercicio.trancado ? 1 : 0,
           exercicio.feito ? 1 : 0,
@@ -65,58 +67,59 @@ export const insertInitialData = () => {
   });
 };
 
-export const updateFeitoStatus = (id, feito) => {
-  db.withTransactionAsync(async () => {
-    db.runAsync('UPDATE exercicios SET feito = ? WHERE id = ?', [feito, id])
-      .then(result => {
-        console.log('Feito status after update: ', result);
-      })
-      .catch(error => {
-        console.log('Erro ao atualizar status de feito: ', error);
-      });
-  });
+export const updateFeitoStatus = async (id, feito) => {
+  try {
+    const result = await db.runAsync(
+      'UPDATE exercicios SET feito = ? WHERE id = ?',
+      [feito, id],
+    );
+    console.log('Feito status after update: ', result);
+  } catch (error) {
+    console.log('Erro ao atualizar status feito: ', error);
+  }
 };
 
-export const updateAcertouStatus = (id, acertou) => {
-  db.withTransactionAsync(async () => {
-    db.runAsync('UPDATE exercicios SET acertou = ? WHERE id = ?', [acertou, id])
-      .then(result => {
-        console.log('Acertou status after update: ', result);
-      })
-      .catch(error => {
-        console.log('Erro ao atualizar status de acertou: ', error);
-      });
-  });
+export const updateAcertouStatus = async (id, acertou) => {
+  const result = await db.runAsync(
+    'UPDATE exercicios SET acertou = ? WHERE id = ?',
+    [acertou, id],
+  );
+  console.log('Acertou status after update: ', result);
 };
 
-export const countExerciciosFeitos = async () => {
+export const countExerciciosFeitos = async userID => {
   const result = await db.getFirstAsync(
-    'SELECT COUNT(*) as count FROM exercicios WHERE feito = "true"',
+    'SELECT COUNT(*) as count FROM exercicios WHERE feito == 1 AND userID == ?;',
+    userID,
   );
   console.log('BD: Exercícios feitos: ', result.count);
   return result.count;
 };
 
-export const countExerciciosCertos = async () => {
+export const countExerciciosCertos = async userID => {
   const result = await db.getFirstAsync(
-    'SELECT COUNT(*) as count FROM exercicios WHERE acertou = "true"',
+    'SELECT COUNT(*) as count FROM exercicios WHERE acertou == 1 AND userID == ?;',
+    userID,
   );
   console.log('BD: Exercícios certos: ', result.count);
   return result.count;
 };
 
-export const countExercicios = async () => {
+export const countExercicios = async userID => {
   const result = await db.getFirstAsync(
-    'SELECT COUNT(*) as count FROM exercicios;',
+    'SELECT COUNT(*) as count FROM exercicios WHERE userID == ?;',
+    userID,
   );
   console.log('BD: qtde exercícios: ', result.count);
   return result.count;
 };
 
-export const getExercicios = async () => {
-  const rows = await db.getAllAsync('SELECT * FROM exercicios');
-  console.log('Exercícios: ', rows);
-  const exercicios = rows.map(row => ({
+export const getExercicios = async userID => {
+  const rows = await db.getAllAsync(
+    'SELECT * FROM exercicios WHERE userID == ?;',
+    userID,
+  );
+  return rows.map(row => ({
     id: row.id,
     videoAulaID: JSON.parse(row.videoAulaID),
     trancado: row.trancado === 1,
@@ -130,8 +133,6 @@ export const getExercicios = async () => {
     explicacao: row.explicacao,
     feedback: JSON.parse(row.feedback),
   }));
-  console.log('Exercícios formatados: ', exercicios);
-  return exercicios;
 };
 
 export const deleteDatabase = async () => {

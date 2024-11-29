@@ -1,20 +1,19 @@
 import { View, ActivityIndicator } from 'react-native';
 import AppNavigator from './src/navigation/AppNavigator';
 import LoginScreen from './src/screens/LoginScreen';
-import { AuthProvider } from './src/context/AuthContext';
-import { AuthContext } from './src/context/AuthContext';
+import { MainProvider, MainContext } from './src/context/MainContext';
 import { useContext } from 'react';
 
 export default function App() {
   return (
-    <AuthProvider>
+    <MainProvider>
       <Main />
-    </AuthProvider>
+    </MainProvider>
   );
 }
 
 const Main = () => {
-  const { state } = useContext(AuthContext);
+  const { state } = useContext(MainContext);
   console.log('Main:state:', state);
   return (
     <View

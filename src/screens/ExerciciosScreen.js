@@ -8,32 +8,41 @@ import {
   updateAcertouStatus,
   updateFeitoStatus,
 } from '../api/bancoDeDados';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MainContext } from '../context/MainContext';
 
 export default function ExerciciosScreen() {
   const [exercicios, setExercicios] = useState([]);
   const [exerciciosCertos, setExerciciosCertos] = useState(0);
   const [exerciciosFeitos, setExerciciosFeitos] = useState(0);
-  const [flag, setFlag] = useState(false);
+  const { state, authContext } = useContext(MainContext);
+  const { flag } = authContext;
 
   useEffect(() => {
+    console.log('useEffect');
     const fetchData = async () => {
-      setExercicios(await getExercicios());
-      setExerciciosCertos(await countExerciciosCertos());
-      setExerciciosFeitos(await countExerciciosFeitos());
+      const exercicios = await getExercicios(state.user.id);
+      console.log('ExercicioScreen:useEffect:Exercícios: ', exercicios);
+      setExercicios(exercicios);
+      const certos = await countExerciciosCertos(state.user.id);
+      console.log('ExercicioScreen:useEffect:Certos: ', certos);
+      setExerciciosCertos(certos);
+      const feitos = await countExerciciosFeitos(state.user.id);
+      console.log('ExercicioScreen:useEffect:Feitos: ', feitos);
+      setExerciciosFeitos(feitos);
     };
     fetchData();
-  }, [flag]);
+  }, [state.flag]);
 
   const corrigeExercicio = (resposta, item) => {
     if (resposta.correta === true) {
       updateAcertouStatus(item.id, true);
       updateFeitoStatus(item.id, true);
-      setFlag(!flag);
+      flag();
       return item.feedback.mensagens.acerto;
     } else {
       updateFeitoStatus(item.id, true);
-      setFlag(!flag);
+      flag();
       return item.feedback.mensagens.erro;
     }
   };

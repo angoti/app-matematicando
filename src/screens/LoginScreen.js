@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
+import { MainContext } from '../context/MainContext';
 import { useContext } from 'react';
 
 const LoginScreen = () => {
   const [isSigninInProgress, setIsSigninInProgress] = useState(false);
-  const { authContext } = useContext(AuthContext);
+  const { authContext } = useContext(MainContext);
   const { signIn } = authContext;
 
   return (

@@ -1,5 +1,5 @@
 import { Text, View, Alert, Pressable, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import styles from '../styles/styles';
 import { PizzaChart } from '../components/PizzaChart';
 import { PieChart } from 'react-native-gifted-charts';
@@ -8,25 +8,27 @@ import {
   countExerciciosCertos,
   countExerciciosFeitos,
 } from '../api/bancoDeDados';
+import { MainContext } from '../context/MainContext';
 
 function EstatisticasScreen() {
   const [contadorAcertos, setContadorAcertos] = useState(0);
   const [contadorFeitos, setContadorFeitos] = useState(0);
   const [qtdeExercicios, setQtdeExercicios] = useState(0);
+  const { state } = useContext(MainContext);
 
   useEffect(() => {
     const updateData = async () => {
-      const certos = await countExerciciosCertos();
+      const certos = await countExerciciosCertos(state.user.id);
       setContadorAcertos(certos); // Atualiza o estado de acertos
 
-      const feitos = await countExerciciosFeitos();
+      const feitos = await countExerciciosFeitos(state.user.id);
       setContadorFeitos(feitos); // Atualiza o estado de feitos
 
-      const exercicios = await countExercicios();
+      const exercicios = await countExercicios(state.user.id);
       setQtdeExercicios(exercicios); // Atualiza o estado de exercícios
     };
     updateData();
-  }, []);
+  }, [state.flag]);
 
   const data = [
     {
