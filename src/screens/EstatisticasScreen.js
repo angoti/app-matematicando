@@ -4,9 +4,9 @@ import styles from '../styles/styles';
 import { PizzaChart } from '../components/PizzaChart';
 import { PieChart } from 'react-native-gifted-charts';
 import {
+  countExercicios,
   countExerciciosCertos,
   countExerciciosFeitos,
-  getExercicios,
 } from '../api/bancoDeDados';
 
 function EstatisticasScreen() {
@@ -15,29 +15,17 @@ function EstatisticasScreen() {
   const [qtdeExercicios, setQtdeExercicios] = useState(0);
 
   useEffect(() => {
-    countExerciciosCertos()
-      .then(res => {
-        setContadorAcertos(res);
-      })
-      .catch(err => {
-        console.error('Error fetching countExerciciosCertos:', err);
-      });
+    const updateData = async () => {
+      const certos = await countExerciciosCertos();
+      setContadorAcertos(certos); // Atualiza o estado de acertos
 
-    countExerciciosFeitos()
-      .then(res => {
-        setContadorFeitos(res);
-      })
-      .catch(err => {
-        console.error('Error fetching countExerciciosFeitos:', err);
-      });
+      const feitos = await countExerciciosFeitos();
+      setContadorFeitos(feitos); // Atualiza o estado de feitos
 
-    getExercicios()
-      .then(res => {
-        setQtdeExercicios(res.length);
-      })
-      .catch(err => {
-        console.error('Error fetching getExercicios:', err);
-      });
+      const exercicios = await countExercicios();
+      setQtdeExercicios(exercicios); // Atualiza o estado de exercícios
+    };
+    updateData();
   }, []);
 
   const data = [

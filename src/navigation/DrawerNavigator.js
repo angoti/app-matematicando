@@ -24,6 +24,7 @@ import { useContext } from 'react';
 import TermsScreen from '../screens/TermsScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
 import { getNivelAprendizado } from '../api/dados';
+import { deleteDatabase } from '../api/bancoDeDados';
 
 const Drawer = createDrawerNavigator();
 
@@ -32,8 +33,7 @@ const iconSize = 24;
 
 export default function DrawerNavigator() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const { state, authContext } =
-    useContext(AuthContext);
+  const { state, authContext } = useContext(AuthContext);
 
   const { signOut } = authContext;
 
@@ -117,6 +117,16 @@ export default function DrawerNavigator() {
           onPress={async () => {
             try {
               await signOut();
+            } catch (e) {
+              Alert.alert('Erro', e.message);
+            }
+          }}
+        />
+        <Button
+          title="Apagar BD"
+          onPress={async () => {
+            try {
+              await deleteDatabase();
             } catch (e) {
               Alert.alert('Erro', e.message);
             }

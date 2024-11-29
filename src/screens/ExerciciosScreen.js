@@ -17,16 +17,12 @@ export default function ExerciciosScreen() {
   const [flag, setFlag] = useState(false);
 
   useEffect(() => {
-    console.log('ExerciciosScreen useEffect');
-    getExercicios().then(exercicios => {
-      console.log('useEffect getExercicios:', exercicios);
-      setExercicios(exercicios);
-    });
-    countExerciciosCertos().then(count => {
-      console.log('useEffect countExerciciosCertos:', count);
-      setExerciciosCertos(count);
-    });
-    countExerciciosFeitos().then(count => setExerciciosFeitos(count));
+    const fetchData = async () => {
+      setExercicios(await getExercicios());
+      setExerciciosCertos(await countExerciciosCertos());
+      setExerciciosFeitos(await countExerciciosFeitos());
+    };
+    fetchData();
   }, [flag]);
 
   const corrigeExercicio = (resposta, item) => {
