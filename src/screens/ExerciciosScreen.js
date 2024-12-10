@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable, Alert } from 'react-native';
+import { View, FlatList } from 'react-native';
 import styles from '../styles/styles';
 import { CardQuestion } from '../components/CardQuestion';
 import {
@@ -13,23 +13,37 @@ import { MainContext } from '../context/MainContext';
 
 export default function ExerciciosScreen() {
   const [exercicios, setExercicios] = useState([]);
-  const [exerciciosCertos, setExerciciosCertos] = useState(0);
-  const [exerciciosFeitos, setExerciciosFeitos] = useState(0);
-  const { state, authContext } = useContext(MainContext);
+  // const [exerciciosCertos, setExerciciosCertos] = useState(0);
+  // const [exerciciosFeitos, setExerciciosFeitos] = useState(0);
+  const { state, authContext, nivelAtivado, setNivelAtivado } = useContext(MainContext);
   const { flag } = authContext;
 
   useEffect(() => {
-    console.log('useEffect');
     const fetchData = async () => {
       const exercicios = await getExercicios(state.user.id);
-      console.log('ExercicioScreen:useEffect:Exercícios: ', exercicios);
-      setExercicios(exercicios);
-      const certos = await countExerciciosCertos(state.user.id);
-      console.log('ExercicioScreen:useEffect:Certos: ', certos);
-      setExerciciosCertos(certos);
-      const feitos = await countExerciciosFeitos(state.user.id);
-      console.log('ExercicioScreen:useEffect:Feitos: ', feitos);
-      setExerciciosFeitos(feitos);
+      let filtroExercicios = [];
+      if (nivelAtivado == 'dificil') {
+        filtroExercicios = exercicios;
+      }
+      else if (nivelAtivado === 'medio') {
+        filtroExercicios = exercicios.filter(exercicio => (exercicio.nivel_dificuldade === nivelAtivado || exercicio.nivel_dificuldade === 'facil'));
+      } else filtroExercicios = exercicios.filter(exercicio => exercicio.nivel_dificuldade === nivelAtivado);
+
+      const rest = filtroExercicios.filter(ex => ex.acertou == false).length;
+      if (rest > 0) {
+        // console.log('ExercicioScreen:useEffect:Exercícios: ', exercicios);
+        setExercicios(filtroExercicios);
+      } else {
+        if (nivelAtivado === 'facil') setNivelAtivado('medio');
+        else if (nivelAtivado === 'medio') setNivelAtivado('dificil');
+        flag();
+      }
+      // const certos = await countExerciciosCertos(state.user.id);
+      // console.log('ExercicioScreen:useEffect:Certos: ', certos);
+      // setExerciciosCertos(certos);
+      // const feitos = await countExerciciosFeitos(state.user.id);
+      // console.log('ExercicioScreen:useEffect:Feitos: ', feitos);
+      // setExerciciosFeitos(feitos);
     };
     fetchData();
   }, [state.flag]);
@@ -49,7 +63,7 @@ export default function ExerciciosScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row' }}>
+      {/* <View style={{ flexDirection: 'row' }}>
         <Pressable
           style={styles.statButton}
           onPress={() =>
@@ -82,7 +96,7 @@ export default function ExerciciosScreen() {
             {exerciciosFeitos}
           </Text>
         </Pressable>
-      </View>
+      </View> */}
       <FlatList
         data={exercicios}
         renderItem={({ item, index }) => (

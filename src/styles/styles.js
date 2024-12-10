@@ -44,7 +44,7 @@ export default StyleSheet.create({
   },
   fullScreenItemContainer: {
     width: Dimensions.get('window').width - 40, // Ajuste para evitar extrapolação
-    height: Dimensions.get('window').height - 240, // Ajuste para evitar extrapolação
+    height: Dimensions.get('window').height - 160, // Ajuste para evitar extrapolação
     backgroundColor: '#fff',
     padding: 15,
     justifyContent: 'center',
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     elevation: 5,
   },
   highlightedQuestion: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 20,

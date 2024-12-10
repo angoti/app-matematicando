@@ -23,8 +23,13 @@ import { MainContext } from '../context/MainContext';
 import { useContext } from 'react';
 import TermsScreen from '../screens/TermsScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicyScreen';
-import { getNivelAprendizado } from '../api/dados';
-import { deleteDatabase } from '../api/bancoDeDados';
+// import { deleteDatabase } from '../api/bancoDeDados';
+import {
+  countExercicios,
+  countExerciciosCertos,
+  countExerciciosFeitos,
+  deleteDatabase,
+} from '../api/bancoDeDados';
 
 const Drawer = createDrawerNavigator();
 
@@ -45,10 +50,6 @@ export default function DrawerNavigator() {
     }
     loadFonts();
   }, []);
-
-  function calcularNivelAprendizado() {
-    return getNivelAprendizado(0);
-  }
 
   function CustomDrawerContent(props) {
     return (
@@ -80,7 +81,6 @@ export default function DrawerNavigator() {
               height: 100,
               alignSelf: 'center',
               borderRadius: 10,
-              flex: 1,
               marginRight: 8,
             }}
           />
@@ -88,26 +88,12 @@ export default function DrawerNavigator() {
             style={{
               justifyContent: 'space-evenly',
               flexShrink: 1,
-              flex: 2,
             }}>
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>
               {state.user.name}
             </Text>
             <Text style={{ color: 'white', fontSize: 10 }}>
               {state.user.email}
-            </Text>
-            <Text
-              style={{
-                fontSize: 12,
-                color: 'white',
-                textAlign: 'center',
-                textShadowColor: '#000',
-                textShadowOffset: { width: 1, height: 1 },
-                textShadowRadius: 2,
-              }}>
-              {calcularNivelAprendizado().nivel}
-              {'\n'}
-              {calcularNivelAprendizado().descricao}
             </Text>
           </View>
         </View>
@@ -121,7 +107,7 @@ export default function DrawerNavigator() {
             }
           }}
         />
-        {/* <Button
+        <Button
           title="Apagar BD"
           onPress={async () => {
             try {
@@ -130,7 +116,7 @@ export default function DrawerNavigator() {
               Alert.alert('Erro', e.message);
             }
           }}
-        /> */}
+        />
       </DrawerContentScrollView>
     );
   }

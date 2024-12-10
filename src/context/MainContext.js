@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useMemo } from 'react';
+import { createContext, useReducer, useEffect, useMemo, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
@@ -15,8 +15,8 @@ export const MainContext = createContext();
 export const MainProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
-      console.log('MainProvider:useReducer:prevState:', prevState);
-      console.log('MainProvider:useReducer:action:', action);
+      // console.log('MainProvider:useReducer:prevState:', prevState);
+      // console.log('MainProvider:useReducer:action:', action);
       switch (action.type) {
         case 'RESTORE_TOKEN':
           return {
@@ -51,13 +51,15 @@ export const MainProvider = ({ children }) => {
     },
   );
 
+  const [nivelAtivado, setNivelAtivado] = useState('facil');
+
   useEffect(() => {
     const bootstrapAsync = async () => {
       let user;
       try {
         const userString = await SecureStore.getItemAsync('user');
         user = userString ? JSON.parse(userString) : null;
-        console.log('MainProvider:useEffect:user:', user);
+        // console.log('MainProvider:useEffect:user:', user);
       } catch (e) {
         Alert.alert(e);
       }
@@ -85,7 +87,7 @@ export const MainProvider = ({ children }) => {
   );
 
   return (
-    <MainContext.Provider value={{ state, authContext }}>
+    <MainContext.Provider value={{ state, authContext, nivelAtivado, setNivelAtivado }}>
       {children}
     </MainContext.Provider>
   );

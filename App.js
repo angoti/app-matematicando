@@ -14,7 +14,7 @@ export default function App() {
 
 const Main = () => {
   const { state } = useContext(MainContext);
-  console.log('Main:state:', state);
+  // console.log('Main:state:', state);
   return (
     <View
       style={{
